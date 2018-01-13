@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+#include<string.h>
+
+using namespace std;
+void cal_next(char *source, int *next, int len)
+{
+    next[0] = -1;                              //next[0]��ʼ��Ϊ-1��-1��ʾ��������ͬ�����ǰ׺������׺
+    int k = -1;                                //k��ʼ��Ϊ-1
+    for (int q = 1; q <= len-1; q++)
+    {
+        while (k > -1 && source[k + 1] != source[q])//�����һ����ͬ����ôk�ͱ��next[k]��ע��next[k]��С��k�ģ�����kȡ�κ�ֵ��
+        {
+            k = next[k];                           //��ǰ����
+        }
+        if (source[k + 1] == source[q])//�����ͬ��k++
+        {
+            k = k + 1;
+        }
+	
+next[q] = k;//����ǰ����k��ֵ��������ͬ�����ǰ׺������׺��������next[q]
+    }
+}
+int KMP(char *source, int slen, char *target, int plen)
+{
+    int *next = new int[plen];
+    cal_next(target, next, plen);                //����next����
+    int k = -1;
+    for (int i = 0; i < slen; i++)
+    {
+        while (k >-1&& target[k + 1] != source[i])//target��source��ƥ�䣬��k>-1����ʾtarget��source�в���ƥ�䣩
+            k = next[k];                          //��ǰ����
+        if (target[k + 1] == source[i])
+            k = k + 1;
+        if (k == plen-1)                          //˵��k�ƶ���target����ĩ��
+        {                                       
+            return i-plen+1;                      //������Ӧ��λ��
+        }
+    }
+    return -1;  
+}
+int main()
+{
+	char *source ="bhsnsdgfjgkshkhfbabachjhfkye";
+    char *target ="babac";
+    int i=strlen(source);
+    int j=strlen(target);
+    int a = KMP(source,i, target,j);
+    cout<<"��ԭ�ַ����ĵ�"<<a<<"��λ����ƥ����ַ���"<<endl;
+    return 0;
+}
+
+
+
+
+
+
+#include<bits/stdc++.h>
+#include<string.h>
+
+using namespace std;
+int main()
+{
+	char *source ="bhsnsdgfjgkshkhfbabachjhfkye";
+    char *target ="babac";
+    int a=strlen(source);       //��Դ�ַ������еĳ��� 
+    int b=strlen(target);       //��Ŀ�����д��ĳ��� 
+    int m;
+    for(int i=0;i<a;i++)
+    {
+    	int c=i;                //������λ���Ǹ�����ʼ����ͬ������ 
+        int d=0;
+    	for(int j=0;j<b;j++)
+	    {
+		    if(source[c]==target[j]) //һһ�Ľ��бȽ� 
+		    {
+		    	d++;
+		    	c++;
+		    	continue;
+			}
+		    else break;
+	    } 
+	    if(d==b)                    //�ҵ���һ�����ȵ����У���ӡ����λ�õ���ʼλ�� 
+	    {
+	    	 cout<<"1"<<endl;
+	    	 cout<<"��"<<c-b<<"���λ��������"<<endl;
+		}
+	    else                         //û���ҵ�������ȵ����У���ӡ��-1 
+	    {
+	    	if(c<a)
+	    	continue;
+	    	else cout<<"-1"<<endl;
+		}
+	}
+	return 0; 
+}
+
